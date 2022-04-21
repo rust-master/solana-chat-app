@@ -2,6 +2,6 @@ use borsh::{BorshDeserialize, BorshSerialize};
 
 #[derive(BorshSerialize, BorshDeserialize, Debug, Clone)]
 pub enum ChatInstruction {
-    SendMessage,
+    SendMessage { message: String },
     GetMessages,
 }
