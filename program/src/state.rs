@@ -7,8 +7,7 @@ use solana_program::{
 #[derive(BorshDeserialize, BorshSerialize, Debug, Clone)]
 pub struct ChatMessage {
     pub messages: Vec<String>,
-    pub sender: Pubkey,
-    pub reciever: Pubkey,
-    pub archive_id: String,
-    pub created_on: String,
+    pub sender: String,
+    pub reciever: String,
+    pub created_on: i64,
 }

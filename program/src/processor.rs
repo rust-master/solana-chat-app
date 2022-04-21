@@ -7,6 +7,9 @@ use solana_program::{
     pubkey::Pubkey,
 };
 
+use solana_program::sysvar::clock::Clock;
+use solana_program::sysvar::Sysvar;
+
 use crate::instruction::ChatInstruction;
 use crate::state::ChatMessage;
 
@@ -24,13 +27,17 @@ impl Processor {
         let account_iter = &mut accounts.iter();
 
         match instruction {
-            ChatInstruction::SendMessage { message } => {
+            ChatInstruction::SendMessage { message, reciever } => {
                 msg!("Send Message Instruction Run");
 
                 let send_ai = next_account_info(account_iter)?;
                 let mut chat = ChatMessage::try_from_slice(&send_ai.data.borrow())?;
+                let unix_timestamp = Clock::get().unwrap().unix_timestamp;
 
                 chat.messages.push(message);
+                chat.created_on = unix_timestamp;
+                chat.sender = send_ai.owner.to_string();
+                chat.reciever = reciever;
 
                 chat.serialize(&mut *send_ai.data.borrow_mut())?;
             }
